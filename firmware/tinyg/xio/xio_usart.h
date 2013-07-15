@@ -91,8 +91,8 @@
 
 #define USB_INBITS_bm (USB_CTS_bm | USB_RX_bm)	// input bits
 #define USB_OUTBITS_bm (USB_RTS_bm | USB_TX_bm)	// output bits
-#define USB_OUTCLR_bm (0)						// outputs init'd to 0
-#define USB_OUTSET_bm (USB_RTS_bm | USB_TX_bm)	// outputs init'd to 1
+#define USB_OUTCLR_bm (USB_RTS_bm)						// outputs init'd to 0
+#define USB_OUTSET_bm (USB_TX_bm)	// outputs init'd to 1
 
 //**** RS485 device configuration (no echo or CRLF) ****
 #define RS485_BAUD	   XIO_BAUD_115200
