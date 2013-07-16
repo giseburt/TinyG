@@ -84,6 +84,11 @@
 #define USB_PORT PORTC							// port where the USART is located
 #define USB_CTS_bp (1)							// CTS - bit position (pin is wired on board)
 #define USB_CTS_bm (1<<USB_CTS_bp)				// CTS - bit mask
+#define USB_CTS_PINCTRL PIN1CTRL				// CTS - PINxCTRL assignment
+#define USB_CTS_ISR_vect PORTC_INT0_vect		// CTS - Interrupt Vector (PORTC_INT0_vect or PORTC_INT1_vect)
+#define USB_CTS_INTMSK INT0MASK					// CTS - Interrupt Maske Register (INT0MASK or INT1MASK)
+#define USB_CTS_INTLVL (PORT_INT0LVL_LOW_gc)
+
 #define USB_RTS_bp (0)							// RTS - bit position (pin is wired on board)
 #define USB_RTS_bm (1<<USB_RTS_bp)				// RTS - bit mask
 #define USB_RX_bm (1<<2)						// RX pin bit mask

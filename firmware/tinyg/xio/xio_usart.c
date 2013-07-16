@@ -154,6 +154,11 @@ FILE *xio_open_usart(const uint8_t dev, const char *addr, const flags_t flags)
 	dx->port->OUTSET = (uint8_t)pgm_read_byte(&cfgUsart[idx].outset);
 	dx->usart->CTRLB = (USART_TXEN_bm | USART_RXEN_bm);	// enable tx and rx
 	dx->usart->CTRLA = CTRLA_RXON_TXON;					// enable tx and rx IRQs
+
+	dx->port->USB_CTS_PINCTRL = PORT_OPC_TOTEM_gc | PORT_ISC_BOTHEDGES_gc;
+	dx->port->INTCTRL = USB_CTS_INTLVL;		// see xio_usart.h for setting
+	dx->port->USB_CTS_INTMSK = USB_CTS_bm;
+	
 	return (&d->file);		// return FILE reference
 
 	// here's a bag for the RS485 device
@@ -366,6 +371,7 @@ int xio_putc_usart(const char c, FILE *stream)
 {
 	return (XIO_OK);
 }
+
 
 /* Fakeout routines
  *
