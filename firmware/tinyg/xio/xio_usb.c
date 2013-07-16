@@ -92,7 +92,7 @@ ISR(USB_TX_ISR_vect) //ISR(USARTC0_DRE_vect)		// USARTC0 data register empty
 {
 	if (USBu.fc_char == NUL) {						// normal char TX path
 		// If the CTS pin (FTDI's RTS) is HIGH, then we cannot send more.
-		if (!(USBu.port->IN & USB_CTS_bm)) {
+		if ((USBu.port->IN & USB_CTS_bm)) {
 			USBu.usart->CTRLA = CTRLA_RXON_TXOFF;	// force another interrupt
 			return;
 		}
@@ -203,4 +203,7 @@ void xio_reset_usb_rx_buffers(void)
 	USBu.rx_buf_tail = 1;
 	USBu.tx_buf_head = 1;
 	USBu.tx_buf_tail = 1;
+	
+	xio_xon_usart(&USBu);
+	
 }

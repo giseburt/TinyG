@@ -82,9 +82,9 @@
 #define USB_TX_ISR_vect USARTC0_DRE_vect		// (TX) data register empty IRQ
 
 #define USB_PORT PORTC							// port where the USART is located
-#define USB_CTS_bp (0)							// CTS - bit position (pin is wired on board)
+#define USB_CTS_bp (1)							// CTS - bit position (pin is wired on board)
 #define USB_CTS_bm (1<<USB_CTS_bp)				// CTS - bit mask
-#define USB_RTS_bp (1)							// RTS - bit position (pin is wired on board)
+#define USB_RTS_bp (0)							// RTS - bit position (pin is wired on board)
 #define USB_RTS_bm (1<<USB_RTS_bp)				// RTS - bit mask
 #define USB_RX_bm (1<<2)						// RX pin bit mask
 #define USB_TX_bm (1<<3)						// TX pin bit mask
