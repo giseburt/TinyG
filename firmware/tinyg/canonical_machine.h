@@ -29,6 +29,39 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/* Command synchronzation and state management in the canonical machine
+ *
+ * 	The canonical machine needs to be aware of the gcode model state (model) 
+ *	and the runtine state (runtime). Some commands affect only the model in 
+ *	that they provide input to other commands. Other commands need to be 
+ *	passed to the planner so that they execute in synchronzation with the 
+ *	Gcode. The canoncial machine needs to be aware of this and keep it straight
+ *
+ *	Similarly, some data retrieval commands (gets) need to return values from 
+ *	the model, others need to return the actual runtime state.
+ *
+ *	The following lists the proper handling for the canonical machine commands
+ *
+ *  === SYSTEM STATE ===
+ *
+
+
+ * 	GETS
+ *
+ *	=== MODEL ===
+ *
+ *	=== RUNTIME ===
+ *
+
+ *	SETS / COMMANDS
+ *
+ *	=== MODEL ===
+ *
+ *	=== RUNTIME ===
+ *  cm_set_absolute_origin() - G28.3
+ *	 
+*/
+
 #ifndef canonical_machine_h
 #define canonical_machine_h
 
@@ -195,19 +228,11 @@ GCodeInput_t gf;		// gcode input flags
 /*****************************************************************************
  * 
  * MACHINE STATE MODEL
- * ref: http://www.synthetos.com/wiki/index.php?title=Projects:TinyG-State-Models
  *
- * The following variables track canonical machine state and state transitions.
- *
- *		- cm.machine_state		- overall state of machine and program execution
- *		- cm.cycle_state		- what cycle the machine is executing (or none)
- *		- cm.motion_state		- state of movement
- *
- * These additional sub-states are also tracked
- *
- *		- mr.hold_state
- *		- mr.feed_override_state
- *		- cm.homing_state
+ * The following main variables track canonical machine state and state transitions.
+ *		- cm.machine_state	- overall state of machine and program execution
+ *		- cm.cycle_state	- what cycle the machine is executing (or none)
+ *		- cm.motion_state	- state of movement
  */
 /*	Allowed states and combined states
  *
@@ -464,20 +489,21 @@ void cm_set_spindle_mode(uint8_t spindle_mode);
 void cm_set_spindle_speed_parameter(float speed);
 void cm_set_tool_number(uint8_t tool);
 
-float cm_get_coord_offset(uint8_t axis);
-float *cm_get_coord_offset_vector(float vector[]);
+float cm_get_model_coord_offset(uint8_t axis);
+float *cm_get_model_coord_offset_vector(float vector[]);
 float cm_get_model_work_position(uint8_t axis);
-float *cm_get_model_work_position_vector(float position[]);
+//float *cm_get_model_work_position_vector(float position[]);
 float cm_get_model_canonical_target(uint8_t axis);
 float *cm_get_model_canonical_position_vector(float vector[]);
+
 float cm_get_runtime_machine_position(uint8_t axis);
 float cm_get_runtime_work_position(uint8_t axis);
 float cm_get_runtime_work_offset(uint8_t axis);
 
-void cm_set_arc_offset(float i, float j, float k);
-void cm_set_arc_radius(float r);
-void cm_set_target(float target[], float flag[]);
-void cm_set_gcode_model_endpoint_position(stat_t status);
+void cm_set_model_arc_offset(float i, float j, float k);
+void cm_set_model_arc_radius(float r);
+void cm_set_model_target(float target[], float flag[]);
+void cm_set_model_endpoint_position(stat_t status);
 void cm_set_model_linenum(uint32_t linenum);
 
 /*--- canonical machining functions ---*/

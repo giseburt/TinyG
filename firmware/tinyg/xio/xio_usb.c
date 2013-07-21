@@ -115,8 +115,10 @@ ISR(USB_TX_ISR_vect) //ISR(USARTC0_DRE_vect)		// USARTC0 data register empty
 /*
  * Pin Change (edge-detect) interrupt for CTS pin.
  */
-ISR(USB_CTS_ISR_vect)	{
-	USBu.usart->CTRLA = CTRLA_RXON_TXON;	// force another interrupt
+
+ISR(USB_CTS_ISR_vect)	
+{
+	USBu.usart->CTRLA = CTRLA_RXON_TXON;		// force another interrupt
 }
 
 
@@ -138,9 +140,6 @@ ISR(USB_CTS_ISR_vect)	{
  *	- Flow control should cut off at high water mark, re-enable at low water mark
  *	- High water mark should have about 4 - 8 bytes left in buffer (~95% full) 
  *	- Low water mark about 50% full
- *
- *  See https://www.synthetos.com/wiki/index.php?title=Projects:TinyG-Module-Details#Notes_on_Circular_Buffers
- *  for a discussion of how the circular buffers work
  */
 
 ISR(USB_RX_ISR_vect)	//ISR(USARTC0_RXC_vect)	// serial port C0 RX int 
@@ -211,7 +210,8 @@ void xio_reset_usb_rx_buffers(void)
 	USBu.rx_buf_tail = 1;
 	USBu.tx_buf_head = 1;
 	USBu.tx_buf_tail = 1;
-	
-	xio_xon_usart(&USBu);
+
+	// I think we might need this: (-Rob)
+	//xio_xon_usart(&USBu);
 	
 }
