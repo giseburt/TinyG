@@ -338,17 +338,20 @@ int16_t js_serialize_json(cmdObj_t *cmd, char *out_buf, uint16_t size)
 				if (cm_get_model_units_mode() == INCHES) { cmd->value /= MM_PER_INCH;}
 				cmd->objtype = TYPE_FLOAT;
 			}
-			if (cmd->objtype == TYPE_NULL)	{ str += sprintf(str, "\"\"");}
-			else if (cmd->objtype == TYPE_INTEGER)	{ str += sprintf(str, "%1.0f", (double)cmd->value);}
+			if (cmd->objtype == TYPE_NULL)	{ str += sprintf(str, "\"\"");} // Note that that "" is NOT null.
+			else if (cmd->objtype == TYPE_INTEGER)	{ double tmp_value = (double)cmd->value; str += sprintf(str, "%1.0f", tmp_value == NAN ? 0 : tmp_value);}
 			else if (cmd->objtype == TYPE_STRING)	{ str += sprintf(str, "\"%s\"",*cmd->stringp);}
 			else if (cmd->objtype == TYPE_ARRAY)	{ str += sprintf(str, "[%s]",  *cmd->stringp);}
 			else if (cmd->objtype == TYPE_FLOAT) {
-				if 		(cmd->precision == 0) { str += sprintf(str, "%0.0f", (double)cmd->value);}
-				else if (cmd->precision == 1) { str += sprintf(str, "%0.1f", (double)cmd->value);}
-				else if (cmd->precision == 2) { str += sprintf(str, "%0.2f", (double)cmd->value);}
-				else if (cmd->precision == 3) { str += sprintf(str, "%0.3f", (double)cmd->value);}
-				else if (cmd->precision == 4) { str += sprintf(str, "%0.4f", (double)cmd->value);}
-				else 						  { str += sprintf(str, "%f", 	 (double)cmd->value);}
+				double tmp_value = (double)cmd->value;
+				if (tmp_value == NAN)
+					tmp_value = 0;
+				if 		(cmd->precision == 0) { str += sprintf(str, "%0.0f", tmp_value);}
+				else if (cmd->precision == 1) { str += sprintf(str, "%0.1f", tmp_value);}
+				else if (cmd->precision == 2) { str += sprintf(str, "%0.2f", tmp_value);}
+				else if (cmd->precision == 3) { str += sprintf(str, "%0.3f", tmp_value);}
+				else if (cmd->precision == 4) { str += sprintf(str, "%0.4f", tmp_value);}
+				else 						  { str += sprintf(str, "%f", 	 tmp_value);}
 			}
 			else if (cmd->objtype == TYPE_BOOL) {
 				if (cmd->value == false) { str += sprintf(str, "false");}
